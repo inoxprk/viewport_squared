@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Playlist Player</title>
+</head>
+<body>
+    <div id="player"></div>
+    <button id="play-pause">Play/Pause</button>
+    <button id="previous">Previous</button>
+    <button id="next">Next</button>
+
+    <script>
+        var player;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '315',
+                width: '560',
+                playerVars: {
+                    'listType': 'playlist',
+                    'list': 'PL2Tr0gxxZcd8h6d9Ia581nA6jeEnETtoO'
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            var playPauseButton = document.getElementById("play-pause");
+            var previousButton = document.getElementById("previous");
+            var nextButton = document.getElementById("next");
+
+            playPauseButton.addEventListener("click", function() {
+                if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                    player.pauseVideo();
+                } else {
+                    player.playVideo();
+                }
+            });
+
+            previousButton.addEventListener("click", function() {
+                player.previousVideo();
+            });
+
+            nextButton.addEventListener("click", function() {
+                player.nextVideo();
+            });
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.ENDED) {
+                player.nextVideo();
+            }
+        }
+    </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>

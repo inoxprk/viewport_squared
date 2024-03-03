@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT URL Viewer</title>
+</head>
+<body>
+    <h1>NFT URL Viewer</h1>
+    <p id="url"></p>
+
+    <script>
+        // JavaScript code to extract URL from query parameters
+        window.onload = function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var url = urlParams.get('url');
+            document.getElementById('url').textContent = "URL: " + url;
+        };
+    </script>
+</body>
+</html>
