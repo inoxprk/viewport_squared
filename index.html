@@ -3,90 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slidable Knobs</title>
+    <title>Slider Input and Button</title>
     <style>
-        .knob {
-            width: 100px;
-            height: 100px;
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            width: 80%;
+            height: 15px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+        
+        .slider:hover {
+            opacity: 1;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
-            background-color: #ccc;
-            position: relative;
+            background: #4CAF50;
             cursor: pointer;
         }
-
-        .slider {
-            width: 200px;
-            margin: 50px auto;
+        
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+        }
+        
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
         }
 
-        .knob-handle {
-            width: 30px;
-            height: 30px;
-            background-color: #333;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <div class="slider">
-        <div class="knob" id="knob1">
-            <div class="knob-handle" id="handle1"></div>
-        </div>
-        <div class="knob" id="knob2">
-            <div class="knob-handle" id="handle2"></div>
-        </div>
+    <div class="container">
+        <input type="range" min="0" max="100" value="50" class="slider" id="mySlider">
+        <br><br>
+        <button class="button" id="myButton">Change Color</button>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const knob1 = document.getElementById('knob1');
-            const handle1 = document.getElementById('handle1');
-            const knob2 = document.getElementById('knob2');
-            const handle2 = document.getElementById('handle2');
+        // Get references to the slider and button
+        const slider = document.getElementById('mySlider');
+        const button = document.getElementById('myButton');
 
-            function moveKnob1(event) {
-                const rect = knob1.getBoundingClientRect();
-                let x = event.clientX - rect.left;
-                let y = event.clientY - rect.top;
-
-                x = Math.max(0, Math.min(x, rect.width));
-                y = Math.max(0, Math.min(y, rect.height));
-
-                handle1.style.left = x + 'px';
-                handle1.style.top = y + 'px';
-            }
-
-            function moveKnob2(event) {
-                const rect = knob2.getBoundingClientRect();
-                let x = event.clientX - rect.left;
-                let y = event.clientY - rect.top;
-
-                x = Math.max(0, Math.min(x, rect.width));
-                y = Math.max(0, Math.min(y, rect.height));
-
-                handle2.style.left = x + 'px';
-                handle2.style.top = y + 'px';
-            }
-
-            knob1.addEventListener('mousedown', function(event) {
-                moveKnob1(event);
-                document.addEventListener('mousemove', moveKnob1);
-            });
-
-            knob2.addEventListener('mousedown', function(event) {
-                moveKnob2(event);
-                document.addEventListener('mousemove', moveKnob2);
-            });
-
-            document.addEventListener('mouseup', function() {
-                document.removeEventListener('mousemove', moveKnob1);
-                document.removeEventListener('mousemove', moveKnob2);
-            });
+        // Add event listener to the button
+        button.addEventListener('click', function() {
+            // Change button color
+            button.style.backgroundColor = getRandomColor();
         });
+
+        // Function to generate random color
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
     </script>
 </body>
 </html>
