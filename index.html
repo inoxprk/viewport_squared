@@ -3,19 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFT URL Viewer</title>
+    <title>NFC Scanner</title>
 </head>
 <body>
-    <h1>NFT URL Viewer</h1>
-    <p id="url"></p>
+    <h1>NFC Scanner</h1>
+    <p>Scan an NFC tag to see the embedded URL.</p>
+    <p>Scanned URL: <span id="scannedUrl"></span></p>
 
     <script>
-        // JavaScript code to extract URL from query parameters
-        window.onload = function() {
-            var urlParams = new URLSearchParams(window.location.search);
-            var url = urlParams.get('url');
-            document.getElementById('url').textContent = "URL: " + url;
-        };
+        // Check if NFC is supported
+        if ('NDEFReader' in window) {
+            const nfcReader = new NDEFReader();
+
+            // Add event listener for reading NFC tags
+            nfcReader.addEventListener('reading', event => {
+                const tag = event.message.records[0];
+                const url = new URL(tag.recordType);
+                
+                // Display the scanned URL
+                document.getElementById('scannedUrl').textContent = url.href;
+            });
+
+            // Start listening for NFC tags
+            nfcReader.scan();
+        } else {
+            // NFC not supported
+            document.getElementById('scannedUrl').textContent = 'NFC not supported on this device.';
+        }
     </script>
 </body>
 </html>
