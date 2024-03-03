@@ -3,33 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFC Scanner</title>
+    <title>Slidable Knobs</title>
+    <style>
+        .knob {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ccc;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .slider {
+            width: 200px;
+            margin: 50px auto;
+        }
+
+        .knob-handle {
+            width: 30px;
+            height: 30px;
+            background-color: #333;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
 <body>
-    <h1>NFC Scanner</h1>
-    <p>Scan an NFC tag to see the embedded URL.</p>
-    <p>Scanned URL: <span id="scannedUrl"></span></p>
+    <div class="slider">
+        <div class="knob" id="knob1">
+            <div class="knob-handle" id="handle1"></div>
+        </div>
+        <div class="knob" id="knob2">
+            <div class="knob-handle" id="handle2"></div>
+        </div>
+    </div>
 
     <script>
-        // Check if NFC is supported
-        if ('NDEFReader' in window) {
-            const nfcReader = new NDEFReader();
+        document.addEventListener('DOMContentLoaded', function() {
+            const knob1 = document.getElementById('knob1');
+            const handle1 = document.getElementById('handle1');
+            const knob2 = document.getElementById('knob2');
+            const handle2 = document.getElementById('handle2');
 
-            // Add event listener for reading NFC tags
-            nfcReader.addEventListener('reading', event => {
-                const tag = event.message.records[0];
-                const url = new URL(tag.recordType);
-                
-                // Display the scanned URL
-                document.getElementById('scannedUrl').textContent = url.href;
+            function moveKnob1(event) {
+                const rect = knob1.getBoundingClientRect();
+                let x = event.clientX - rect.left;
+                let y = event.clientY - rect.top;
+
+                x = Math.max(0, Math.min(x, rect.width));
+                y = Math.max(0, Math.min(y, rect.height));
+
+                handle1.style.left = x + 'px';
+                handle1.style.top = y + 'px';
+            }
+
+            function moveKnob2(event) {
+                const rect = knob2.getBoundingClientRect();
+                let x = event.clientX - rect.left;
+                let y = event.clientY - rect.top;
+
+                x = Math.max(0, Math.min(x, rect.width));
+                y = Math.max(0, Math.min(y, rect.height));
+
+                handle2.style.left = x + 'px';
+                handle2.style.top = y + 'px';
+            }
+
+            knob1.addEventListener('mousedown', function(event) {
+                moveKnob1(event);
+                document.addEventListener('mousemove', moveKnob1);
             });
 
-            // Start listening for NFC tags
-            nfcReader.scan();
-        } else {
-            // NFC not supported
-            document.getElementById('scannedUrl').textContent = 'NFC not supported on this device.';
-        }
+            knob2.addEventListener('mousedown', function(event) {
+                moveKnob2(event);
+                document.addEventListener('mousemove', moveKnob2);
+            });
+
+            document.addEventListener('mouseup', function() {
+                document.removeEventListener('mousemove', moveKnob1);
+                document.removeEventListener('mousemove', moveKnob2);
+            });
+        });
     </script>
 </body>
 </html>
