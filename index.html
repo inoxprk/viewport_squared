@@ -85,7 +85,7 @@
             button.style.backgroundColor = getRandomColor();
         });
 
-        // Prevent default touch behavior on mobile devices
+        // Prevent default touch behavior only when interacting with the sliders
         slider1.addEventListener('touchstart', function(event) {
             event.stopPropagation();
         });
