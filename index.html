@@ -82,6 +82,13 @@
             button.style.backgroundColor = getRandomColor();
         });
 
+        // Prevent default touch behavior on mobile devices
+        document.addEventListener('touchstart', function(event) {
+            if (event.target !== slider && event.target !== button) {
+                event.preventDefault();
+            }
+        });
+
         // Function to generate random color
         function getRandomColor() {
             const letters = '0123456789ABCDEF';
