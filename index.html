@@ -67,15 +67,16 @@
 </head>
 <body>
     <div class="container">
-        <input type="range" min="0" max="100" value="50" class="slider" id="mySlider">
-        <input type="range" min="0" max="100" value="50" class="slider" id="mySlider">
+        <input type="range" min="0" max="100" value="50" class="slider" id="mySlider1">
+        <input type="range" min="0" max="100" value="50" class="slider" id="mySlider2">
         <br><br>
         <button class="button" id="myButton">Change Color</button>
     </div>
 
     <script>
-        // Get references to the slider and button
-        const slider = document.getElementById('mySlider');
+        // Get references to the sliders and button
+        const slider1 = document.getElementById('mySlider1');
+        const slider2 = document.getElementById('mySlider2');
         const button = document.getElementById('myButton');
 
         // Add event listener to the button
@@ -85,10 +86,12 @@
         });
 
         // Prevent default touch behavior on mobile devices
-        document.addEventListener('touchstart', function(event) {
-            if (event.target !== slider && event.target !== button) {
-                event.preventDefault();
-            }
+        slider1.addEventListener('touchstart', function(event) {
+            event.stopPropagation();
+        });
+
+        slider2.addEventListener('touchstart', function(event) {
+            event.stopPropagation();
         });
 
         // Function to generate random color
