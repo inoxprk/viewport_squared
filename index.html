@@ -19,14 +19,22 @@
     <button id="previous">Previous</button>
     <button id="next">Next</button>
 
-    <script>
-        $(document).ready(function () {
-            // Scroll to the bottom of the page
-            $("html, body").animate({
-                scrollTop: $(document).height()
-            }, "slow");
-        });
+    <button id="scrollButton">Scroll Down</button>
 
+    <script>
+        // $(document).ready(function () {
+        //     // Scroll to the bottom of the page
+        //     $("html, body").animate({
+        //         scrollTop: $(document).height()
+        //     }, "slow");
+        // });
+
+        $("#scrollButton").click(function() {
+                // Scroll to the bottom of the page
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            });
+
+            
         var player;
 
         function onYouTubeIframeAPIReady() {
