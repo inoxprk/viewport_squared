@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Playlist Player</title>
     <style>
-        body{
+        body {
             height: 110vh;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <div id="player"></div>
     <button id="play-pause">Play/Pause</button>
@@ -17,14 +20,11 @@
     <button id="next">Next</button>
 
     <script>
-        // Function to scroll to the bottom of the page
-        function scrollToBottom() {
-            window.scrollTo(0, document.body.scrollHeight);
-        }
-
-        // Add event listener to the window object to trigger scrolling when the page is loaded
-        window.addEventListener('load', function() {
-            scrollToBottom();
+        $(document).ready(function () {
+            // Scroll to the bottom of the page
+            $("html, body").animate({
+                scrollTop: $(document).height()
+            }, "slow");
         });
 
         var player;
@@ -49,7 +49,7 @@
             var previousButton = document.getElementById("previous");
             var nextButton = document.getElementById("next");
 
-            playPauseButton.addEventListener("click", function() {
+            playPauseButton.addEventListener("click", function () {
                 if (player.getPlayerState() == YT.PlayerState.PLAYING) {
                     player.pauseVideo();
                 } else {
@@ -57,11 +57,11 @@
                 }
             });
 
-            previousButton.addEventListener("click", function() {
+            previousButton.addEventListener("click", function () {
                 player.previousVideo();
             });
 
-            nextButton.addEventListener("click", function() {
+            nextButton.addEventListener("click", function () {
                 player.nextVideo();
             });
         }
@@ -74,4 +74,5 @@
     </script>
     <script src="https://www.youtube.com/iframe_api"></script>
 </body>
+
 </html>
