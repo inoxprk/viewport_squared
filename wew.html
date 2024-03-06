@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Full Screen Website</title>
+    <style>
+        /* Define styles for your website */
+        #content {
+            background-color: lightgray;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <!-- Your website content goes here -->
+        <button id="fullscreen-button">Enter Full Screen</button>
+    </div>
+
+    <script>
+        // Get the button element
+        var fullscreenButton = document.getElementById('fullscreen-button');
+        
+        // Add event listener to the button
+        fullscreenButton.addEventListener('click', function() {
+            var element = document.documentElement; // Get the root element (the entire webpage)
+            if (element.requestFullscreen) {
+                element.requestFullscreen(); // Request full screen
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen(); // Firefox
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen(); // Chrome, Safari and Opera
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen(); // IE/Edge
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider Input and Button</title>
+    <style>
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            width: 80%;
+            height: 15px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            margin-bottom: 30px;
+        }
+        
+        .slider:hover {
+            opacity: 1;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+        }
+        
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="range" min="0" max="100" value="50" class="slider" id="mySlider1">
+        <input type="range" min="0" max="100" value="50" class="slider" id="mySlider2">
+        <br><br>
+        <button class="button" id="myButton">Change Color</button>
+    </div>
+
+    <script>
+        // Get references to the sliders and button
+        const slider1 = document.getElementById('mySlider1');
+        const slider2 = document.getElementById('mySlider2');
+        const button = document.getElementById('myButton');
+
+        // Add event listener to the button
+        button.addEventListener('click', function() {
+            // Change button color
+            button.style.backgroundColor = getRandomColor();
+        });
+
+        // Prevent default touch behavior only when interacting with the sliders
+        slider1.addEventListener('touchstart', function(event) {
+            event.stopPropagation();
+        });
+
+        slider2.addEventListener('touchstart', function(event) {
+            event.stopPropagation();
+        });
+
+        // Function to generate random color
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    </script>
+</body>
+</html> -->
