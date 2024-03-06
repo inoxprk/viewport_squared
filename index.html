@@ -4,12 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Full Screen Website</title>
-    <!-- Your other meta tags, stylesheets, and scripts go here -->
+    <style>
+        /* Define styles for your website */
+        #content {
+            background-color: lightgray;
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>hello world</h1>
+    <div id="content">
+        <!-- Your website content goes here -->
+        <button id="fullscreen-button">Enter Full Screen</button>
+    </div>
+
+    <script>
+        // Get the button element
+        var fullscreenButton = document.getElementById('fullscreen-button');
+        
+        // Add event listener to the button
+        fullscreenButton.addEventListener('click', function() {
+            var element = document.documentElement; // Get the root element (the entire webpage)
+            if (element.requestFullscreen) {
+                element.requestFullscreen(); // Request full screen
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen(); // Firefox
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen(); // Chrome, Safari and Opera
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen(); // IE/Edge
+            }
+        });
+    </script>
 </body>
 </html>
+
 
 
 <!-- <!DOCTYPE html>
