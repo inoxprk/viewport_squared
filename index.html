@@ -17,6 +17,16 @@
     <button id="next">Next</button>
 
     <script>
+        // Function to scroll to the bottom of the page
+        function scrollToBottom() {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        // Add event listener to the window object to trigger scrolling when the page is loaded
+        window.addEventListener('load', function() {
+            scrollToBottom();
+        });
+
         var player;
 
         function onYouTubeIframeAPIReady() {
