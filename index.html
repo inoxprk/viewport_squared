@@ -6,36 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Playlist Player</title>
     <style>
-        body {
-            height: 110vh;
+        body{ 
+            padding: 0;
+            margin: 0;
+        }
+
+        .box {
+            width: 390px;
+            height: 844px;
+            background-color: red;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div id="player"></div>
+    <div class="box"></div>
+
+    <!-- <div id="player"></div>
     <button id="play-pause">Play/Pause</button>
     <button id="previous">Previous</button>
     <button id="next">Next</button>
-
-    <button id="scrollButton">Scroll Down</button>
+    <input type="range" min="0" max="100" value="100" id="volumeSlider"> -->
 
     <script>
-        // $(document).ready(function () {
-        //     // Scroll to the bottom of the page
-        //     $("html, body").animate({
-        //         scrollTop: $(document).height()
-        //     }, "slow");
-        // });
-
-        $("#scrollButton").click(function() {
-                // Scroll to the bottom of the page
-                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
-            });
-
-            
         var player;
+        var volumeSlider = document.getElementById("volumeSlider");
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
@@ -71,6 +68,12 @@
 
             nextButton.addEventListener("click", function () {
                 player.nextVideo();
+            });
+
+            // Set initial volume and attach event listener to the volume slider
+            player.setVolume(volumeSlider.value);
+            volumeSlider.addEventListener("input", function () {
+                player.setVolume(this.value);
             });
         }
 
