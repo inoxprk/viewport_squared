@@ -114,9 +114,13 @@
         volumeSlider.addEventListener("input", setVolume);
         volumeSlider.addEventListener("change", setVolume);
         volumeSlider.addEventListener("touchmove", setVolume); // For smoother interaction on touch devices
+
+        player.setVolume(0);
     }
 
     // Function to handle volume changes
+
+
     function setVolume() {
         player.setVolume(this.value);
     }
