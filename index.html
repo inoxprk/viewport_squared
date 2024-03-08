@@ -19,7 +19,7 @@
         }
 
         .box .playerwrap {
-            overflow: hidden;
+            /* overflow: hidden; */
             background-color: blue;
             display: flex;
             justify-content: center;
@@ -64,73 +64,78 @@
     </div>
 
     <script>
+
         var player;
         var volumeSlider = document.getElementById("volumeSlider");
-// Function to set up the YouTube player
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-            height: '500',
-            width: '288',
-            playerVars: {
-                autoplay: 1,
-                listType: 'playlist',
-                list: 'PL2Tr0gxxZcd8h6d9Ia581nA6jeEnETtoO'
-            },
-            controls: 0,
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
-            }
-        });
-    }
-
-    // Function called when the YouTube player is ready
-    function onPlayerReady(event) {
-        var playPauseButton = document.getElementById("play-pause");
-        var previousButton = document.getElementById("previous");
-        var nextButton = document.getElementById("next");
-
-        // Play/Pause button event listener
-        playPauseButton.addEventListener("touchstart", function () {
-            if (player.getPlayerState() == YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-            } else {
-                player.playVideo();
-            }
-        });
-
-        // Previous button event listener
-        previousButton.addEventListener("touchstart", function () {
-            player.previousVideo();
-        });
-
-        // Next button event listener
-        nextButton.addEventListener("touchstart", function () {
-            player.nextVideo();
-        });
-
-        // Set initial volume and attach event listeners to the volume slider
-        player.setVolume(volumeSlider.value);
-        volumeSlider.addEventListener("input", setVolume);
-        volumeSlider.addEventListener("change", setVolume);
-        volumeSlider.addEventListener("touchmove", setVolume); // For smoother interaction on touch devices
-
-        player.setVolume(0);
-    }
-
-    // Function to handle volume changes
 
 
-    function setVolume() {
-        player.setVolume(this.value);
-    }
-
-    // Function to handle player state changes
-    function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.ENDED) {
-            player.nextVideo();
+        // Function to set up the YouTube player
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '500',
+                width: '588',
+                playerVars: {
+                    // autoplay: 1,
+                    listType: 'playlist',
+                    list: 'PL2Tr0gxxZcd8h6d9Ia581nA6jeEnETtoO'
+                },
+                controls: 0,
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
         }
-    }
+
+        // Function called when the YouTube player is ready
+        function onPlayerReady(event) {
+
+            // auto plays the video when ready
+            event.target.playVideo();
+
+            var playPauseButton = document.getElementById("play-pause");
+            var previousButton = document.getElementById("previous");
+            var nextButton = document.getElementById("next");
+
+            // Play/Pause button event listener
+            playPauseButton.addEventListener("touchstart", function () {
+                if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                    player.pauseVideo();
+                } else {
+                    player.playVideo();
+                }
+            });
+
+            // Previous button event listener
+            previousButton.addEventListener("touchstart", function () {
+                player.previousVideo();
+            });
+
+            // Next button event listener
+            nextButton.addEventListener("touchstart", function () {
+                player.nextVideo();
+            });
+
+            // Set initial volume and attach event listeners to the volume slider
+            player.setVolume(volumeSlider.value);
+            volumeSlider.addEventListener("input", setVolume);
+            volumeSlider.addEventListener("change", setVolume);
+            volumeSlider.addEventListener("touchmove", setVolume); // For smoother interaction on touch devices
+        }
+
+        // Function to handle volume changes
+
+
+        function setVolume() {
+            player.setVolume(this.value);
+        }
+
+        // Function to handle player state changes
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.ENDED) {
+                player.nextVideo();
+            }
+        }
     </script>
     <script src="https://www.youtube.com/iframe_api"></script>
 </body>
