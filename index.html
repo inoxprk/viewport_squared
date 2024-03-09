@@ -11,11 +11,19 @@
         * {
             overscroll-behavior: none;
         }
-        html, body {
+
+        *::-webkit-scrollbar {
+            display: none;
+            scrollbar-width: none;
+        }
+
+        html,
+        body {
             padding: 0;
             margin: 0;
             overscroll-behavior: none;
             height: 150vh;
+            background-color: #000;
         }
 
         .box {
@@ -23,7 +31,7 @@
             height: 664px;
             background-color: #000;
             position: fixed;
-            top:0;
+            top: 0;
         }
 
         .box .playerwrap {
@@ -335,30 +343,30 @@
             });
 
             document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
-    var startTime = new Date().getTime();
-    previousButton.addEventListener("touchend", function (endEvent) {
-        var endTime = new Date().getTime();
-        var elapsedTime = endTime - startTime;
-        if (elapsedTime <= 250) {
-            player.previousVideo();
-        }
-        // Remove the touchend event listener to avoid multiple executions
-        previousButton.removeEventListener("touchend");
-    });
-});
+                var startTime = new Date().getTime();
+                previousButton.addEventListener("touchend", function (endEvent) {
+                    var endTime = new Date().getTime();
+                    var elapsedTime = endTime - startTime;
+                    if (elapsedTime <= 250) {
+                        player.previousVideo();
+                    }
+                    // Remove the touchend event listener to avoid multiple executions
+                    previousButton.removeEventListener("touchend");
+                });
+            });
 
-document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
-    var startTime = new Date().getTime();
-    nextButton.addEventListener("touchend", function (endEvent) {
-        var endTime = new Date().getTime();
-        var elapsedTime = endTime - startTime;
-        if (elapsedTime <= 250) {
-            player.nextVideo();
-        }
-        // Remove the touchend event listener to avoid multiple executions
-        nextButton.removeEventListener("touchend");
-    });
-});
+            document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
+                var startTime = new Date().getTime();
+                nextButton.addEventListener("touchend", function (endEvent) {
+                    var endTime = new Date().getTime();
+                    var elapsedTime = endTime - startTime;
+                    if (elapsedTime <= 250) {
+                        player.nextVideo();
+                    }
+                    // Remove the touchend event listener to avoid multiple executions
+                    nextButton.removeEventListener("touchend");
+                });
+            });
 
         }
 
@@ -367,7 +375,6 @@ document.getElementById("menu").addEventListener("touchstart", function (startEv
                 player.nextVideo();
             }
         }
-
     </script>
 
     <script src="https://www.youtube.com/iframe_api"></script>
