@@ -8,8 +8,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
-        html,
-        body {
+        html, body {
             padding: 0;
             margin: 0;
             overscroll-behavior: none;
@@ -243,11 +242,11 @@
         var closeControl = document.getElementById("close");
         var nextControl = document.getElementById("next");
         var controlWrap = document.querySelector('.controlwrap');
-        var fastForwardInterval;
 
-        // reveals controlwrap when initially tapped on 'menu' button
+        // reveals controlwrap when initially tapped on'menu' button
         // triggers "touchend" on whichever is .active
         document.getElementById("menu").addEventListener("touchend", function () {
+            var controlWrap = document.querySelector('.controlwrap');
             if (controlWrap.style.display === 'flex') {
                 // Find the element with the active class among .control elements
                 var activeControl = document.querySelector('.control.active');
@@ -261,6 +260,7 @@
             }
         });
 
+
         closeControl.addEventListener("touchend", function () {
             // Check if .controlwrap's display is flex and #close has .active class
             if (controlWrap.style.display === 'flex' && closeControl.classList.contains("active")) {
@@ -272,7 +272,10 @@
             }
         });
 
+
+
         // adds .active based on slider value
+
         menuSlider.addEventListener("input", function () {
             var sliderValue = parseInt(menuSlider.value);
 
@@ -327,37 +330,30 @@
             });
 
             document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
-                var startTime = new Date().getTime();
-                previousButton.addEventListener("touchend", function (endEvent) {
-                    var endTime = new Date().getTime();
-                    var elapsedTime = endTime - startTime;
-                    if (elapsedTime <= 250) {
-                        player.previousVideo();
-                    }
-                    // Remove the touchend event listener to avoid multiple executions
-                    previousButton.removeEventListener("touchend");
-                });
-            });
+    var startTime = new Date().getTime();
+    previousButton.addEventListener("touchend", function (endEvent) {
+        var endTime = new Date().getTime();
+        var elapsedTime = endTime - startTime;
+        if (elapsedTime <= 250) {
+            player.previousVideo();
+        }
+        // Remove the touchend event listener to avoid multiple executions
+        previousButton.removeEventListener("touchend");
+    });
+});
 
-            document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
-                var startTime = new Date().getTime();
-                nextButton.addEventListener("touchend", function (endEvent) {
-                    var endTime = new Date().getTime();
-                    var elapsedTime = endTime - startTime;
-                    if (elapsedTime <= 250) {
-                        player.nextVideo();
-                    } else {
-                        // Fast forward the video by 3 seconds increment until touchend is triggered on nextButton
-                        if (!fastForwardInterval) {
-                            fastForwardInterval = setInterval(function () {
-                                player.seekTo(player.getCurrentTime() + 3, true); // Fast forward by 3 seconds
-                            }, 1000); // Fast forward every second
-                        }
-                    }
-                    // Remove the touchend event listener to avoid multiple executions
-                    nextButton.removeEventListener("touchend");
-                });
-            });
+document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
+    var startTime = new Date().getTime();
+    nextButton.addEventListener("touchend", function (endEvent) {
+        var endTime = new Date().getTime();
+        var elapsedTime = endTime - startTime;
+        if (elapsedTime <= 250) {
+            player.nextVideo();
+        }
+        // Remove the touchend event listener to avoid multiple executions
+        nextButton.removeEventListener("touchend");
+    });
+});
 
         }
 
@@ -366,6 +362,7 @@
                 player.nextVideo();
             }
         }
+
     </script>
 
     <script src="https://www.youtube.com/iframe_api"></script>
