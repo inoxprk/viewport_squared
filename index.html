@@ -8,7 +8,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
-        body {
+        html, body {
             padding: 0;
             margin: 0;
             overscroll-behavior: none;
@@ -344,14 +344,6 @@
             }
         }
 
-        // prevent overscroll
-        $('body').on('touchmove', selScrollable, function (e) {
-            // Only block default if internal div contents are large enough to scroll
-            // Warning: scrollHeight support is not universal. (https://stackoverflow.com/a/15033226/40352)
-            if ($(this)[0].scrollHeight > $(this).innerHeight()) {
-                e.stopPropagation();
-            }
-        });
     </script>
 
     <script src="https://www.youtube.com/iframe_api"></script>
