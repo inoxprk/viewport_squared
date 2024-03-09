@@ -70,7 +70,7 @@
             width: 300px;
             height: 200px;
             transform: rotate(270deg);
-
+            margin-left: -30px;
         }
 
         .box .controlwrap .controls .control {
@@ -141,7 +141,7 @@
         }
 
         .box .controlwrap img {
-            margin-left:-70px;
+            margin-left: -70px;
             width: 200px;
             height: 20px;
             transform: rotate(270deg);
@@ -155,11 +155,11 @@
             font-family: sans-serif;
             font-size: 8px;
             color: #fff;
-            padding-bottom:16px;
+            padding-bottom: 16px;
             box-sizing: border-box;
             display: flex;
             justify-content: center;
-            align-items:flex-end;
+            align-items: flex-end;
             width: 100%;
             height: 100px;
             background-color: #1f1f1f;
@@ -221,7 +221,7 @@
         </div>
         <div class="controlwrap">
             <div class="controls">
-                
+
                 <div class="control" id="previous">
                     <span class="material-symbols-outlined">
                         skip_previous
@@ -375,6 +375,47 @@
                         player.nextVideo();
                     }
                     // Remove the touchend event listener to avoid multiple executions
+                    nextButton.removeEventListener("touchend");
+                });
+
+                nextButton.addEventListener("touchend", function (endEvent) {
+                    var endTime = new Date().getTime();
+                    var elapsedTime = endTime - startTime;
+                    if (elapsedTime <= 250) {
+                        player.nextVideo();
+                    }
+                    // Remove the touchend event listener to avoid multiple executions
+                    nextButton.removeEventListener("touchend");
+                });
+
+                // Define a function to fast forward the YouTube video by 3 seconds
+                function fastForwardVideo() {
+                    // Check if the player is currently playing
+                    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                        // Get the current playback time
+                        var currentTime = player.getCurrentTime();
+                        // Add 3 seconds to the current time to fast forward the video
+                        var newTime = currentTime + 3;
+                        // Seek to the new time
+                        player.seekTo(newTime,
+                        true); // true parameter indicates to seek to the new time in seconds
+                    }
+                }
+
+                // Set an interval to repeatedly check if 250ms have passed and fast forward the video
+                var intervalId = setInterval(function () {
+                    // Check if 250ms have passed since touchstart event
+                    var currentTime = new Date().getTime();
+                    if (currentTime - startTime >= 250) {
+                        // Call the function to fast forward the video
+                        fastForwardVideo();
+                    }
+                }, 100); // You can adjust the interval time for more responsiveness
+
+                // Add event listener for touchend to clear the interval
+                document.getElementById("menu").addEventListener("touchend", function () {
+                    clearInterval(intervalId); // Clear the interval when touchend event occurs
+                    // Also remove the touchend event listener on nextButton
                     nextButton.removeEventListener("touchend");
                 });
             });
