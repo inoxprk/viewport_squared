@@ -329,7 +329,7 @@
                 }
             });
 
-            previousButton.addEventListener("touchstart", function (startEvent) {
+            document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
     var startTime = new Date().getTime();
     previousButton.addEventListener("touchend", function (endEvent) {
         var endTime = new Date().getTime();
@@ -342,7 +342,7 @@
     });
 });
 
-nextButton.addEventListener("touchstart", function (startEvent) {
+document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
     var startTime = new Date().getTime();
     nextButton.addEventListener("touchend", function (endEvent) {
         var endTime = new Date().getTime();
