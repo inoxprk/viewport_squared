@@ -240,13 +240,39 @@
         var previousControl = document.getElementById("previous");
         var closeControl = document.getElementById("close");
         var nextControl = document.getElementById("next");
+        var controlWrap = document.querySelector('.controlwrap');
 
-        document.getElementById("menu").addEventListener("click", function () {
+        // reveals controlwrap when initially tapped on'menu' button
+        // triggers "touchend" on whichever is .active
+        document.getElementById("menu").addEventListener("touchend", function () {
             var controlWrap = document.querySelector('.controlwrap');
-            if (controlWrap.style.display === 'none' || controlWrap.style.display === '') {
+            if (controlWrap.style.display === 'flex') {
+                // Find the element with the active class among .control elements
+                var activeControl = document.querySelector('.control.active');
+                if (activeControl) {
+                    // Trigger "touchend" event on the active control
+                    var touchEvent = new Event('touchend');
+                    activeControl.dispatchEvent(touchEvent);
+                }
+            }
+            else {
                 controlWrap.style.display = 'flex';
             }
         });
+
+
+        closeControl.addEventListener("touchend", function () {
+            // Check if .controlwrap's display is flex and #close has .active class
+            if (controlWrap.style.display === 'flex' && closeControl.classList.contains("active")) {
+                // Add a touchend event listener to #close
+                document.getElementById("close").addEventListener("touchend", function () {
+                    // Change .controlwrap to display: none
+                    controlWrap.style.display = 'none';
+                });
+            }
+        });
+
+
 
         // adds .active based on slider value
 
@@ -295,7 +321,7 @@
             var previousButton = document.getElementById("previous");
             var nextButton = document.getElementById("next");
 
-            playPauseButton.addEventListener("touchstart", function () {
+            playPauseButton.addEventListener("touchend", function () {
                 if (player.getPlayerState() == YT.PlayerState.PLAYING) {
                     player.pauseVideo();
                 } else {
@@ -303,11 +329,11 @@
                 }
             });
 
-            previousButton.addEventListener("touchstart", function () {
+            previousButton.addEventListener("touchend", function () {
                 player.previousVideo();
             });
 
-            nextButton.addEventListener("touchstart", function () {
+            nextButton.addEventListener("touchend", function () {
                 player.nextVideo();
             });
         }
