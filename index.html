@@ -329,13 +329,32 @@
                 }
             });
 
-            previousButton.addEventListener("touchend", function () {
-                player.previousVideo();
-            });
+            previousButton.addEventListener("touchstart", function (startEvent) {
+    var startTime = new Date().getTime();
+    previousButton.addEventListener("touchend", function (endEvent) {
+        var endTime = new Date().getTime();
+        var elapsedTime = endTime - startTime;
+        if (elapsedTime <= 250) {
+            player.previousVideo();
+        }
+        // Remove the touchend event listener to avoid multiple executions
+        previousButton.removeEventListener("touchend");
+    });
+});
 
-            nextButton.addEventListener("touchend", function () {
-                player.nextVideo();
-            });
+nextButton.addEventListener("touchstart", function (startEvent) {
+    var startTime = new Date().getTime();
+    nextButton.addEventListener("touchend", function (endEvent) {
+        var endTime = new Date().getTime();
+        var elapsedTime = endTime - startTime;
+        if (elapsedTime <= 250) {
+            player.nextVideo();
+        }
+        // Remove the touchend event listener to avoid multiple executions
+        nextButton.removeEventListener("touchend");
+    });
+});
+
         }
 
         function onPlayerStateChange(event) {
