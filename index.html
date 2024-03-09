@@ -353,8 +353,19 @@
                 }
             });
 
+
+
+
+
+
+
+
+
+
             document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
                 var startTime = new Date().getTime();
+
+
                 previousButton.addEventListener("touchend", function (endEvent) {
                     var endTime = new Date().getTime();
                     var elapsedTime = endTime - startTime;
@@ -366,44 +377,40 @@
                 });
 
 
-                // Define a function to rewind the YouTube video by 3 seconds
-                function rewindVideo() {
-                    // Check if the player is currently playing
-                    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
-                        // Get the current playback time
-                        var currentTime = player.getCurrentTime();
-                        // Subtract 3 seconds from the current time to rewind the video
-                        var newTime = currentTime - 3;
-                        // Ensure the new time is not negative
-                        if (newTime < 0) {
-                            newTime = 0; // Set newTime to 0 if it becomes negative
-                        }
-                        // Seek to the new time
-                        player.seekTo(newTime,
-                        true); // true parameter indicates to seek to the new time in seconds
-                    }
-                }
-
-                // Set up event listener for touchend on previousButton
-                previousButton.addEventListener("touchend", function (endEvent) {
+                nextButton.addEventListener("touchend", function (endEvent) {
                     var endTime = new Date().getTime();
                     var elapsedTime = endTime - startTime;
                     if (elapsedTime <= 250) {
-                        rewindVideo();
+                        player.nextVideo();
                     }
                     // Remove the touchend event listener to avoid multiple executions
-                    previousButton.removeEventListener("touchend");
+                    nextButton.removeEventListener("touchend");
                 });
 
-                // Set an interval to repeatedly check if 250ms have passed and rewind the video
-                var intervalId = setInterval(function () {
-                    // Check if 250ms have passed since touchstart event
-                    var currentTime = new Date().getTime();
-                    if (currentTime - startTime >= 250) {
-                        // Call the function to rewind the video
-                        rewindVideo();
-                    }
-                }, 100); // You can adjust the interval time for more responsiveness
+
+
+                // Check if #next or #previous has .active class and set intervals accordingly
+                if (document.getElementById('next').classList.contains('active')) {
+                    // Set an interval to repeatedly check if 250ms have passed and fast forward the video
+                    var intervalId = setInterval(function () {
+                        // Check if 250ms have passed since touchstart event
+                        var currentTime = new Date().getTime();
+                        if (currentTime - startTime >= 250) {
+                            // Call the function to fast forward the video
+                            fastForwardVideo();
+                        }
+                    }, 100); // You can adjust the interval time for more responsiveness
+                } else if (document.getElementById('previous').classList.contains('active')) {
+                    // Set an interval to repeatedly check if 250ms have passed and rewind the video
+                    var intervalId = setInterval(function () {
+                        // Check if 250ms have passed since touchstart event
+                        var currentTime = new Date().getTime();
+                        if (currentTime - startTime >= 250) {
+                            // Call the function to rewind the video
+                            rewindVideo();
+                        }
+                    }, 100); // You can adjust the interval time for more responsiveness
+                }
 
                 // Add event listener for touchend to clear the interval
                 document.getElementById("menu").addEventListener("touchend", function () {
@@ -411,60 +418,7 @@
                     // Also remove the touchend event listener on previousButton
                     previousButton.removeEventListener("touchend");
                 });
-            });
 
-            document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
-                var startTime = new Date().getTime();
-                nextButton.addEventListener("touchend", function (endEvent) {
-                    var endTime = new Date().getTime();
-                    var elapsedTime = endTime - startTime;
-                    if (elapsedTime <= 250) {
-                        player.nextVideo();
-                    }
-                    // Remove the touchend event listener to avoid multiple executions
-                    nextButton.removeEventListener("touchend");
-                });
-
-                nextButton.addEventListener("touchend", function (endEvent) {
-                    var endTime = new Date().getTime();
-                    var elapsedTime = endTime - startTime;
-                    if (elapsedTime <= 250) {
-                        player.nextVideo();
-                    }
-                    // Remove the touchend event listener to avoid multiple executions
-                    nextButton.removeEventListener("touchend");
-                });
-
-                // Define a function to fast forward the YouTube video by 3 seconds
-                function fastForwardVideo() {
-                    // Check if the player is currently playing
-                    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
-                        // Get the current playback time
-                        var currentTime = player.getCurrentTime();
-                        // Add 3 seconds to the current time to fast forward the video
-                        var newTime = currentTime + 3;
-                        // Seek to the new time
-                        player.seekTo(newTime,
-                            true); // true parameter indicates to seek to the new time in seconds
-                    }
-                }
-
-                // Set an interval to repeatedly check if 250ms have passed and fast forward the video
-                var intervalId = setInterval(function () {
-                    // Check if 250ms have passed since touchstart event
-                    var currentTime = new Date().getTime();
-                    if (currentTime - startTime >= 250) {
-                        // Call the function to fast forward the video
-                        fastForwardVideo();
-                    }
-                }, 100); // You can adjust the interval time for more responsiveness
-
-                // Add event listener for touchend to clear the interval
-                document.getElementById("menu").addEventListener("touchend", function () {
-                    clearInterval(intervalId); // Clear the interval when touchend event occurs
-                    // Also remove the touchend event listener on nextButton
-                    nextButton.removeEventListener("touchend");
-                });
             });
         }
 

@@ -8,16 +8,30 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
+        * {
+            overscroll-behavior: none;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+            scrollbar-width: none;
+        }
+
+        html,
         body {
             padding: 0;
             margin: 0;
+            overscroll-behavior: none;
+            height: 100vh;
+            background-color: #000;
         }
 
         .box {
             width: 390px;
             height: 664px;
             background-color: #000;
-            position: relative;
+            position: fixed;
+            top: 0;
         }
 
         .box .playerwrap {
@@ -39,12 +53,14 @@
         .box .controlwrap {
             width: 288px;
             height: 288px;
-            display: flex;
+            display: none;
+            /* switches between flex and none */
             justify-content: center;
             align-items: center;
             position: absolute;
             bottom: 0;
             left: 0;
+            background-color: rgba(0, 0, 0, .6);
         }
 
         .box .controlwrap .controls {
@@ -53,17 +69,16 @@
             align-items: center;
             width: 300px;
             height: 200px;
-            background-color: rgba(0, 0, 0, .6);
             transform: rotate(270deg);
-
+            margin-left: -30px;
         }
 
         .box .controlwrap .controls .control {
-            width: 100%;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: left;
             align-items: center;
             font-family: sans-serif;
             background-color: transparent;
@@ -72,8 +87,8 @@
             border-radius: 8px;
             font-size: 14px;
             opacity: 0.5;
-            padding: 4px;
-            margin: 4px;
+            padding-top: 10px;
+            margin: 3px;
             text-align: center;
         }
 
@@ -124,18 +139,27 @@
                 transform: translateY(0);
             }
         }
+
+        .box .controlwrap img {
+            margin-left: -70px;
+            width: 200px;
+            height: 20px;
+            transform: rotate(270deg);
+        }
+
         .prm-control-wrap {
             display: flex;
         }
 
         .prm-control-wrap .prm-control {
             font-family: sans-serif;
-            color:#fff;
+            font-size: 8px;
+            color: #fff;
+            padding-bottom: 16px;
             box-sizing: border-box;
-            display: block;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-end;
             width: 100%;
             height: 100px;
             background-color: #1f1f1f;
@@ -145,13 +169,13 @@
 
         #menuSlider {
             position: absolute;
-            right: -87px;
-            bottom: 120px;
+            right: -95px;
+            bottom: 91px;
             margin-top: 20px;
             /* Increase the size of the knob */
             -webkit-appearance: none;
-            width: 220px;
-            height: 50px;
+            width: 287px;
+            height: 100px;
             background: #000;
             /* Grey background */
             outline: none;
@@ -161,19 +185,19 @@
         #menuSlider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 30px;
+            width: 100px;
             /* Set width of the knob */
-            height: 50px;
+            height: 100px;
             /* Set height of the knob */
-            background: #fff;
+            background: #1f1f1f;
             /* Green background */
             cursor: pointer;
         }
 
         #menuSlider::-moz-range-thumb {
-            width: 30px;
+            width: 50px;
             /* Set width of the knob for Firefox */
-            height: 30px;
+            height: 100px;
             /* Set height of the knob for Firefox */
             border-radius: 50%;
             /* Make it round for Firefox */
@@ -196,9 +220,9 @@
             <div id="player"></div>
         </div>
         <div class="controlwrap">
-            <span class="controls">
+            <div class="controls">
 
-                <div class="control active" id="previous">
+                <div class="control" id="previous">
                     <span class="material-symbols-outlined">
                         skip_previous
                     </span>Previous
@@ -211,7 +235,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="control" id="close">
+                <div class="control active" id="close">
                     <span class="material-symbols-outlined">
                         close
                     </span>Close <br> Controls
@@ -229,11 +253,73 @@
                         </span>
                     </div>
                 </div>
+            </div>
+            <img src="./vwpt2_logo.svg" alt="">
         </div>
         <input type="range" min="0" max="100" value="100" id="menuSlider">
     </div>
 
     <script>
+        var menuSlider = document.getElementById("menuSlider");
+        var previousControl = document.getElementById("previous");
+        var closeControl = document.getElementById("close");
+        var nextControl = document.getElementById("next");
+        var controlWrap = document.querySelector('.controlwrap');
+
+        // reveals controlwrap when initially tapped on'menu' button
+        // triggers "touchend" on whichever is .active
+        document.getElementById("menu").addEventListener("touchend", function () {
+            var controlWrap = document.querySelector('.controlwrap');
+            if (controlWrap.style.display === 'flex') {
+                // Find the element with the active class among .control elements
+                var activeControl = document.querySelector('.control.active');
+                if (activeControl) {
+                    // Trigger "touchend" event on the active control
+                    var touchEvent = new Event('touchend');
+                    activeControl.dispatchEvent(touchEvent);
+                }
+            } else {
+                controlWrap.style.display = 'flex';
+            }
+        });
+
+
+        closeControl.addEventListener("touchend", function () {
+            // Check if .controlwrap's display is flex and #close has .active class
+            if (controlWrap.style.display === 'flex' && closeControl.classList.contains("active")) {
+                // Add a touchend event listener to #close
+                document.getElementById("close").addEventListener("touchend", function () {
+                    // Change .controlwrap to display: none
+                    controlWrap.style.display = 'none';
+                });
+            }
+        });
+
+
+
+        // adds .active based on slider value
+
+        menuSlider.addEventListener("input", function () {
+            var sliderValue = parseInt(menuSlider.value);
+
+            if (sliderValue >= 0 && sliderValue <= 33) {
+                // Add active class to previous control and remove from others
+                previousControl.classList.add("active");
+                closeControl.classList.remove("active");
+                nextControl.classList.remove("active");
+            } else if (sliderValue >= 34 && sliderValue <= 66) {
+                // Add active class to close control and remove from others
+                previousControl.classList.remove("active");
+                closeControl.classList.add("active");
+                nextControl.classList.remove("active");
+            } else if (sliderValue >= 67 && sliderValue <= 100) {
+                // Add active class to next control and remove from others
+                previousControl.classList.remove("active");
+                closeControl.classList.remove("active");
+                nextControl.classList.add("active");
+            }
+        });
+
         var player;
 
         function onYouTubeIframeAPIReady() {
@@ -242,7 +328,8 @@
                 width: '288',
                 playerVars: {
                     listType: 'playlist',
-                    list: 'PL2Tr0gxxZcd8h6d9Ia581nA6jeEnETtoO'
+                    list: 'PL2Tr0gxxZcd8h6d9Ia581nA6jeEnETtoO',
+                    loop: 1
                 },
                 controls: 0,
                 events: {
@@ -258,7 +345,7 @@
             var previousButton = document.getElementById("previous");
             var nextButton = document.getElementById("next");
 
-            playPauseButton.addEventListener("touchstart", function () {
+            playPauseButton.addEventListener("touchend", function () {
                 if (player.getPlayerState() == YT.PlayerState.PLAYING) {
                     player.pauseVideo();
                 } else {
@@ -266,12 +353,118 @@
                 }
             });
 
-            previousButton.addEventListener("touchstart", function () {
-                player.previousVideo();
+            document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
+                var startTime = new Date().getTime();
+                previousButton.addEventListener("touchend", function (endEvent) {
+                    var endTime = new Date().getTime();
+                    var elapsedTime = endTime - startTime;
+                    if (elapsedTime <= 250) {
+                        player.previousVideo();
+                    }
+                    // Remove the touchend event listener to avoid multiple executions
+                    previousButton.removeEventListener("touchend");
+                });
+
+
+                // Define a function to rewind the YouTube video by 3 seconds
+                function rewindVideo() {
+                    // Check if the player is currently playing
+                    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                        // Get the current playback time
+                        var currentTime = player.getCurrentTime();
+                        // Subtract 3 seconds from the current time to rewind the video
+                        var newTime = currentTime - 3;
+                        // Ensure the new time is not negative
+                        if (newTime < 0) {
+                            newTime = 0; // Set newTime to 0 if it becomes negative
+                        }
+                        // Seek to the new time
+                        player.seekTo(newTime,
+                        true); // true parameter indicates to seek to the new time in seconds
+                    }
+                }
+
+                // Set up event listener for touchend on previousButton
+                previousButton.addEventListener("touchend", function (endEvent) {
+                    var endTime = new Date().getTime();
+                    var elapsedTime = endTime - startTime;
+                    if (elapsedTime <= 250) {
+                        rewindVideo();
+                    }
+                    // Remove the touchend event listener to avoid multiple executions
+                    previousButton.removeEventListener("touchend");
+                });
+
+                // Set an interval to repeatedly check if 250ms have passed and rewind the video
+                var intervalId = setInterval(function () {
+                    // Check if 250ms have passed since touchstart event
+                    var currentTime = new Date().getTime();
+                    if (currentTime - startTime >= 250) {
+                        // Call the function to rewind the video
+                        rewindVideo();
+                    }
+                }, 100); // You can adjust the interval time for more responsiveness
+
+                // Add event listener for touchend to clear the interval
+                document.getElementById("menu").addEventListener("touchend", function () {
+                    clearInterval(intervalId); // Clear the interval when touchend event occurs
+                    // Also remove the touchend event listener on previousButton
+                    previousButton.removeEventListener("touchend");
+                });
             });
 
-            nextButton.addEventListener("touchstart", function () {
-                player.nextVideo();
+            document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
+                var startTime = new Date().getTime();
+                nextButton.addEventListener("touchend", function (endEvent) {
+                    var endTime = new Date().getTime();
+                    var elapsedTime = endTime - startTime;
+                    if (elapsedTime <= 250) {
+                        player.nextVideo();
+                    }
+                    // Remove the touchend event listener to avoid multiple executions
+                    nextButton.removeEventListener("touchend");
+                });
+
+                nextButton.addEventListener("touchend", function (endEvent) {
+                    var endTime = new Date().getTime();
+                    var elapsedTime = endTime - startTime;
+                    if (elapsedTime <= 250) {
+                        player.nextVideo();
+                    }
+                    // Remove the touchend event listener to avoid multiple executions
+                    nextButton.removeEventListener("touchend");
+                });
+
+                // Define a function to fast forward the YouTube video by 3 seconds
+                function fastForwardVideo() {
+                    // Check if the player is currently playing
+                    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                        // Get the current playback time
+                        var currentTime = player.getCurrentTime();
+                        // Add 3 seconds to the current time to fast forward the video
+                        var newTime = currentTime + 3;
+                        // Seek to the new time
+                        player.seekTo(newTime,
+                            true); // true parameter indicates to seek to the new time in seconds
+                    }
+                }
+
+                // Set an interval to repeatedly check if 250ms have passed and fast forward the video
+                var intervalId = setInterval(function () {
+                    // Check if 250ms have passed since touchstart event
+                    var currentTime = new Date().getTime();
+                    if (currentTime - startTime >= 250) {
+                        // Call the function to fast forward the video
+                        fastForwardVideo();
+                    }
+                }, 100); // You can adjust the interval time for more responsiveness
+
+                // Add event listener for touchend to clear the interval
+                document.getElementById("menu").addEventListener("touchend", function () {
+                    clearInterval(intervalId); // Clear the interval when touchend event occurs
+                    // Also remove the touchend event listener on nextButton
+                    nextButton.removeEventListener("touchend");
+                });
             });
         }
 
@@ -281,6 +474,7 @@
             }
         }
     </script>
+
     <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 
