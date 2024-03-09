@@ -60,7 +60,7 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            background-color: rgba(0, 0, 0, .6);
+            background-color: rgba(0, 0, 0, .7);
         }
 
         .box .controlwrap .controls {
@@ -141,7 +141,7 @@
         }
 
         .box .controlwrap img {
-            margin-left: -70px;
+            margin-left: -90px;
             width: 200px;
             height: 20px;
             transform: rotate(270deg);
@@ -328,7 +328,7 @@
                 width: '288',
                 playerVars: {
                     listType: 'playlist',
-                    list: 'PL2Tr0gxxZcd8h6d9Ia581nA6jeEnETtoO',
+                    list: 'PL2Tr0gxxZcd9AqiORpU8XBlj2SMhIzAZt',
                     loop: 1
                 },
                 controls: 0,
@@ -344,6 +344,7 @@
             var playPauseButton = document.getElementById("play-pause");
             var previousButton = document.getElementById("previous");
             var nextButton = document.getElementById("next");
+            player = event.target;
 
             playPauseButton.addEventListener("touchend", function () {
                 if (player.getPlayerState() == YT.PlayerState.PLAYING) {
@@ -352,6 +353,11 @@
                     player.playVideo();
                 }
             });
+
+            // Set playback quality after a slight delay to ensure player readiness
+            setTimeout(function () {
+                player.setPlaybackQuality('small'); // You can specify the desired quality here
+            }, 1000); // You can adjust the delay as needed
 
 
 
