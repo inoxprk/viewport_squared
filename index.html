@@ -22,7 +22,7 @@
             padding: 0;
             margin: 0;
             overscroll-behavior: none;
-            height: 150vh;
+            height: 100vh;
             background-color: #000;
         }
 
@@ -60,6 +60,7 @@
             position: absolute;
             bottom: 0;
             left: 0;
+            background-color: rgba(0, 0, 0, .6);
         }
 
         .box .controlwrap .controls {
@@ -68,17 +69,16 @@
             align-items: center;
             width: 300px;
             height: 200px;
-            background-color: rgba(0, 0, 0, .6);
             transform: rotate(270deg);
 
         }
 
         .box .controlwrap .controls .control {
-            width: 100%;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: left;
             align-items: center;
             font-family: sans-serif;
             background-color: transparent;
@@ -87,8 +87,8 @@
             border-radius: 8px;
             font-size: 14px;
             opacity: 0.5;
-            padding: 4px;
-            margin: 4px;
+            padding-top: 10px;
+            margin: 3px;
             text-align: center;
         }
 
@@ -140,18 +140,26 @@
             }
         }
 
+        .box .controlwrap img {
+            margin-left:-70px;
+            width: 200px;
+            height: 20px;
+            transform: rotate(270deg);
+        }
+
         .prm-control-wrap {
             display: flex;
         }
 
         .prm-control-wrap .prm-control {
             font-family: sans-serif;
+            font-size: 8px;
             color: #fff;
+            padding-bottom:16px;
             box-sizing: border-box;
-            display: block;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items:flex-end;
             width: 100%;
             height: 100px;
             background-color: #1f1f1f;
@@ -161,12 +169,12 @@
 
         #menuSlider {
             position: absolute;
-            right: -62px;
-            bottom: 100px;
+            right: -95px;
+            bottom: 91px;
             margin-top: 20px;
             /* Increase the size of the knob */
             -webkit-appearance: none;
-            width: 220px;
+            width: 287px;
             height: 100px;
             background: #000;
             /* Grey background */
@@ -177,11 +185,11 @@
         #menuSlider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 50px;
+            width: 100px;
             /* Set width of the knob */
             height: 100px;
             /* Set height of the knob */
-            background: #fff;
+            background: #1f1f1f;
             /* Green background */
             cursor: pointer;
         }
@@ -212,8 +220,8 @@
             <div id="player"></div>
         </div>
         <div class="controlwrap">
-            <span class="controls">
-
+            <div class="controls">
+                
                 <div class="control" id="previous">
                     <span class="material-symbols-outlined">
                         skip_previous
@@ -245,6 +253,8 @@
                         </span>
                     </div>
                 </div>
+            </div>
+            <img src="./vwpt2_logo.svg" alt="">
         </div>
         <input type="range" min="0" max="100" value="100" id="menuSlider">
     </div>
@@ -318,7 +328,8 @@
                 width: '288',
                 playerVars: {
                     listType: 'playlist',
-                    list: 'PL2Tr0gxxZcd8h6d9Ia581nA6jeEnETtoO'
+                    list: 'PL2Tr0gxxZcd8h6d9Ia581nA6jeEnETtoO',
+                    loop: 1
                 },
                 controls: 0,
                 events: {
