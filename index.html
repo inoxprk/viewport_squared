@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Playlist Player</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
         body {
             padding: 0;
@@ -14,12 +16,12 @@
         .box {
             width: 390px;
             height: 664px;
-            background-color: red;
+            background-color: #000;
             position: relative;
         }
 
         .box .playerwrap {
-            /* overflow: hidden; */
+            overflow: hidden;
             background-color: blue;
             display: flex;
             justify-content: center;
@@ -30,22 +32,156 @@
             bottom: 0;
         }
 
-        .box #player {
+        .box .playerwrap #player {
             transform: rotate(-90deg);
-            /* pointer-events: none;
-            Ensure clicks on controls pass through */
         }
 
-        .control {
-            display: inline-block;
-            padding: 10px;
-            background-color: lightgray;
-            margin: 5px;
+        .box .controlwrap {
+            width: 288px;
+            height: 288px;
+            display: none;
+            /* switches between flex and none */
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .box .controlwrap .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
+            height: 200px;
+            background-color: rgba(0, 0, 0, .6);
+            transform: rotate(270deg);
+
+        }
+
+        .box .controlwrap .controls .control {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            background-color: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0.5;
+            padding: 4px;
+            margin: 4px;
+            text-align: center;
+        }
+
+        .box .controlwrap .controls .control .min {
+            font-size: 7px;
+            text-align: left;
+            margin-top: 10px;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            color: darkgray;
+        }
+
+        .box .controlwrap .controls .control.active {
+            opacity: 1;
+        }
+
+        .box .controlwrap .controls .control>span {
+            font-size: 30px;
+        }
+
+        .box .controlwrap .controls .control.active::after {
+            position: absolute;
+            bottom: 16px;
+            content: "";
+            display: block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 22px solid #fff;
+            animation: bounce;
+            animation-duration: 1s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(5px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .prm-control-wrap {
+            display: flex;
+        }
+
+        .prm-control-wrap .prm-control {
+            font-family: sans-serif;
+            color: #fff;
+            box-sizing: border-box;
+            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100px;
+            background-color: #1f1f1f;
+            border: 1px solid black;
+
+        }
+
+        #menuSlider {
+            position: absolute;
+            right: -87px;
+            bottom: 120px;
+            margin-top: 20px;
+            /* Increase the size of the knob */
+            -webkit-appearance: none;
+            width: 220px;
+            height: 50px;
+            background: #000;
+            /* Grey background */
+            outline: none;
+            transform: rotate(270deg);
+        }
+
+        #menuSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 30px;
+            /* Set width of the knob */
+            height: 50px;
+            /* Set height of the knob */
+            background: #fff;
+            /* Green background */
             cursor: pointer;
         }
 
-        #volumeSlider {
-            margin-top: 20px;
+        #menuSlider::-moz-range-thumb {
+            width: 30px;
+            /* Set width of the knob for Firefox */
+            height: 30px;
+            /* Set height of the knob for Firefox */
+            border-radius: 50%;
+            /* Make it round for Firefox */
+            background: #4CAF50;
+            /* Green background for Firefox */
+            cursor: pointer;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -54,28 +190,94 @@
 
 <body>
     <div class="box">
+        <div class="prm-control-wrap">
+            <div class="prm-control" id="play-pause">Play/Pause</div>
+            <div class="prm-control" id="menu">Menu</div>
+        </div>
         <div class="playerwrap">
             <div id="player"></div>
         </div>
-        <div class="control" id="play-pause">Play/Pause</div>
-        <div class="control" id="previous">Previous</div>
-        <div class="control" id="next">Next</div>
-        <input type="range" min="0" max="100" value="100" id="volumeSlider">
+        <div class="controlwrap">
+            <span class="controls">
+
+                <div class="control" id="previous">
+                    <span class="material-symbols-outlined">
+                        skip_previous
+                    </span>Previous
+                    <div class="min">
+                        <span class="material-symbols-outlined" style="font-size: 16px;">
+                            history
+                        </span>
+                        <span style="width: 45px;">
+                            Hold to <br> rewind 5 sec
+                        </span>
+                    </div>
+                </div>
+                <div class="control active" id="close">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>Close <br> Controls
+                </div>
+                <div class="control" id="next">
+                    <span class="material-symbols-outlined">
+                        skip_next
+                    </span>Next
+                    <div class="min">
+                        <span class="material-symbols-outlined" style="font-size: 16px;">
+                            update
+                        </span>
+                        <span style="width: 45px;">
+                            Hold to fast forward 5 sec
+                        </span>
+                    </div>
+                </div>
+        </div>
+        <input type="range" min="0" max="100" value="100" id="menuSlider">
     </div>
 
     <script>
+        var menuSlider = document.getElementById("menuSlider");
+        var previousControl = document.getElementById("previous");
+        var closeControl = document.getElementById("close");
+        var nextControl = document.getElementById("next");
+
+        document.getElementById("menu").addEventListener("click", function () {
+            var controlWrap = document.querySelector('.controlwrap');
+            if (controlWrap.style.display === 'none' || controlWrap.style.display === '') {
+                controlWrap.style.display = 'flex';
+            }
+        });
+
+        // adds .active based on slider value
+
+        menuSlider.addEventListener("input", function () {
+            var sliderValue = parseInt(menuSlider.value);
+
+            if (sliderValue >= 0 && sliderValue <= 33) {
+                // Add active class to previous control and remove from others
+                previousControl.classList.add("active");
+                closeControl.classList.remove("active");
+                nextControl.classList.remove("active");
+            } else if (sliderValue >= 34 && sliderValue <= 66) {
+                // Add active class to close control and remove from others
+                previousControl.classList.remove("active");
+                closeControl.classList.add("active");
+                nextControl.classList.remove("active");
+            } else if (sliderValue >= 67 && sliderValue <= 100) {
+                // Add active class to next control and remove from others
+                previousControl.classList.remove("active");
+                closeControl.classList.remove("active");
+                nextControl.classList.add("active");
+            }
+        });
 
         var player;
-        var volumeSlider = document.getElementById("volumeSlider");
 
-
-        // Function to set up the YouTube player
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
                 height: '500',
-                width: '588',
+                width: '288',
                 playerVars: {
-                    // autoplay: 1,
                     listType: 'playlist',
                     list: 'PL2Tr0gxxZcd8h6d9Ia581nA6jeEnETtoO'
                 },
@@ -87,17 +289,12 @@
             });
         }
 
-        // Function called when the YouTube player is ready
         function onPlayerReady(event) {
-
-            // auto plays the video when ready
             event.target.playVideo();
-
             var playPauseButton = document.getElementById("play-pause");
             var previousButton = document.getElementById("previous");
             var nextButton = document.getElementById("next");
 
-            // Play/Pause button event listener
             playPauseButton.addEventListener("touchstart", function () {
                 if (player.getPlayerState() == YT.PlayerState.PLAYING) {
                     player.pauseVideo();
@@ -106,37 +303,22 @@
                 }
             });
 
-            // Previous button event listener
             previousButton.addEventListener("touchstart", function () {
                 player.previousVideo();
             });
 
-            // Next button event listener
             nextButton.addEventListener("touchstart", function () {
                 player.nextVideo();
             });
-
-            // Set initial volume and attach event listeners to the volume slider
-            player.setVolume(volumeSlider.value);
-            volumeSlider.addEventListener("input", setVolume);
-            volumeSlider.addEventListener("change", setVolume);
-            volumeSlider.addEventListener("touchmove", setVolume); // For smoother interaction on touch devices
         }
 
-        // Function to handle volume changes
-
-
-        function setVolume() {
-            player.setVolume(this.value);
-        }
-
-        // Function to handle player state changes
         function onPlayerStateChange(event) {
             if (event.data == YT.PlayerState.ENDED) {
                 player.nextVideo();
             }
         }
     </script>
+
     <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 
