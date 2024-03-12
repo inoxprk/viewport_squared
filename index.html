@@ -24,13 +24,13 @@
             margin: 0;
             overscroll-behavior: none;
             height: 100vh;
-            background-color: #000;
+            background-color: red;
             user-select: none;
         }
 
         .box {
             width: 390px;
-            height: 664px;
+            height: 640px; /*was 664px initially */
             background-color: #000;
             position: fixed;
             top: 0;
@@ -73,10 +73,11 @@
             height: 200px;
             transform: rotate(270deg);
             margin-left: -30px;
+            gap: 3px;
         }
 
         .box .controlwrap .controls .control {
-            width: 80px;
+            width: 72px;
             height: 80px;
             display: flex;
             flex-direction: column;
@@ -89,8 +90,7 @@
             border-radius: 8px;
             font-size: 14px;
             opacity: 0.5;
-            padding-top: 10px;
-            margin: 3px;
+            padding: 10px 0 5px;
             text-align: center;
         }
 
