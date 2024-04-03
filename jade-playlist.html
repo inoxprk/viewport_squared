@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jade's Playlist</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        * {
+            overscroll-behavior: none;
+            user-select: none;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+            scrollbar-width: none;
+        }
+
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            overscroll-behavior: none;
+            height: 100vh;
+            background-color: #000;
+            user-select: none;
+        }
+
+        .box {
+            width: 390px;
+            height: 640px; /*was 664px initially */
+            background-color: #000;
+            position: fixed;
+            top: 0;
+        }
+
+        .box .playerwrap {
+            overflow: hidden;
+            background-color: blue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 288px;
+            height: 288px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .box .playerwrap #player {
+            transform: rotate(-90deg);
+        }
+
+        .box .controlwrap {
+            width: 288px;
+            height: 288px;
+            display: none;
+            /* switches between flex and none */
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, .7);
+        }
+
+        .box .controlwrap .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
+            height: 200px;
+            transform: rotate(270deg);
+            margin-left: -30px;
+            gap: 3px;
+        }
+
+        .box .controlwrap .controls .control {
+            width: 72px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+            align-items: center;
+            font-family: sans-serif;
+            background-color: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0.5;
+            padding: 10px 0 5px;
+            text-align: center;
+        }
+
+        .box .controlwrap .controls .control .min {
+            font-size: 7px;
+            text-align: left;
+            margin-top: 10px;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            color: darkgray;
+        }
+
+        .box .controlwrap .controls .control.active {
+            opacity: 1;
+        }
+
+        .box .controlwrap .controls .control>span {
+            font-size: 30px;
+        }
+
+        .box .controlwrap .controls .control.active::after {
+            position: absolute;
+            bottom: 16px;
+            content: "";
+            display: block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 22px solid #fff;
+            animation: bounce;
+            animation-duration: 1s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(5px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .box .controlwrap img {
+            margin-left: -90px;
+            width: 200px;
+            height: 20px;
+            transform: rotate(270deg);
+        }
+
+        .prm-control-wrap {
+            display: flex;
+        }
+
+        .prm-control-wrap .prm-control {
+            font-family: sans-serif;
+            font-size: 8px;
+            color: #fff;
+            padding-bottom: 16px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            width: 100%;
+            height: 100px;
+            background-color: #1f1f1f;
+            border: 1px solid black;
+
+        }
+
+        #menuSlider {
+            position: absolute;
+            right: -95px;
+            bottom: 91px;
+            margin-top: 20px;
+            /* Increase the size of the knob */
+            -webkit-appearance: none;
+            width: 287px;
+            height: 100px;
+            background: #000;
+            /* Grey background */
+            outline: none;
+            transform: rotate(270deg);
+        }
+
+        #menuSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100px;
+            /* Set width of the knob */
+            height: 100px;
+            /* Set height of the knob */
+            background: #1f1f1f;
+            /* Green background */
+            cursor: pointer;
+        }
+
+        #menuSlider::-moz-range-thumb {
+            width: 50px;
+            /* Set width of the knob for Firefox */
+            height: 100px;
+            /* Set height of the knob for Firefox */
+            border-radius: 50%;
+            /* Make it round for Firefox */
+            background: #4CAF50;
+            /* Green background for Firefox */
+            cursor: pointer;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="box">
+        <div class="prm-control-wrap">
+            <div class="prm-control" id="play-pause">play/pause</div>
+            <div class="prm-control" id="menu">control</div>
+        </div>
+        <div class="playerwrap">
+            <div id="player"></div>
+        </div>
+        <div class="controlwrap">
+            <div class="controls">
+
+                <div class="control" id="previous">
+                    <span class="material-symbols-outlined">
+                        skip_previous
+                    </span>Previous
+                    <div class="min">
+                        <span class="material-symbols-outlined" style="font-size: 16px;">
+                            history
+                        </span>
+                        <span style="width: 45px;">
+                            Hold to <br> rewind 5 sec
+                        </span>
+                    </div>
+                </div>
+                <div class="control active" id="close">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>Close <br> Controls
+                </div>
+                <div class="control" id="next">
+                    <span class="material-symbols-outlined">
+                        skip_next
+                    </span>Next
+                    <div class="min">
+                        <span class="material-symbols-outlined" style="font-size: 16px;">
+                            update
+                        </span>
+                        <span style="width: 45px;">
+                            Hold to fast forward 5 sec
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <img src="./vwpt2_logo.svg" alt="">
+        </div>
+        <input type="range" min="0" max="100" value="100" id="menuSlider">
+    </div>
+
+    <script>
+        var menuSlider = document.getElementById("menuSlider");
+        var previousControl = document.getElementById("previous");
+        var closeControl = document.getElementById("close");
+        var nextControl = document.getElementById("next");
+        var controlWrap = document.querySelector('.controlwrap');
+
+        // reveals controlwrap when initially tapped on'menu' button
+        // triggers "touchend" on whichever is .active
+        document.getElementById("menu").addEventListener("touchend", function () {
+            var controlWrap = document.querySelector('.controlwrap');
+            if (controlWrap.style.display === 'flex') {
+                // Find the element with the active class among .control elements
+                var activeControl = document.querySelector('.control.active');
+                if (activeControl) {
+                    // Trigger "touchend" event on the active control
+                    var touchEvent = new Event('touchend');
+                    activeControl.dispatchEvent(touchEvent);
+                }
+            } else {
+                controlWrap.style.display = 'flex';
+            }
+        });
+
+
+        closeControl.addEventListener("touchend", function () {
+            // Check if .controlwrap's display is flex and #close has .active class
+            if (controlWrap.style.display === 'flex' && closeControl.classList.contains("active")) {
+                // Add a touchend event listener to #close
+                document.getElementById("close").addEventListener("touchend", function () {
+                    // Change .controlwrap to display: none
+                    controlWrap.style.display = 'none';
+                });
+            }
+        });
+
+
+
+        // adds .active based on slider value
+
+        menuSlider.addEventListener("input", function () {
+            var sliderValue = parseInt(menuSlider.value);
+
+            if (sliderValue >= 0 && sliderValue <= 33) {
+                // Add active class to previous control and remove from others
+                previousControl.classList.add("active");
+                closeControl.classList.remove("active");
+                nextControl.classList.remove("active");
+            } else if (sliderValue >= 34 && sliderValue <= 66) {
+                // Add active class to close control and remove from others
+                previousControl.classList.remove("active");
+                closeControl.classList.add("active");
+                nextControl.classList.remove("active");
+            } else if (sliderValue >= 67 && sliderValue <= 100) {
+                // Add active class to next control and remove from others
+                previousControl.classList.remove("active");
+                closeControl.classList.remove("active");
+                nextControl.classList.add("active");
+            }
+        });
+
+        var player;
+        
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '500',
+                width: '288',
+                playerVars: {
+                    listType: 'playlist',
+                    list: 'PL2Tr0gxxZcd-YKCGI1nXnMMxVEfP_ZEbq',
+                    loop: 1
+                },
+                controls: 0,
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+            var playPauseButton = document.getElementById("play-pause");
+            var previousButton = document.getElementById("previous");
+            var nextButton = document.getElementById("next");
+            player = event.target;
+
+            playPauseButton.addEventListener("touchend", function () {
+                if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                    player.pauseVideo();
+                } else {
+                    player.playVideo();
+                }
+            });
+
+            // Set playback quality after a slight delay to ensure player readiness
+            setTimeout(function () {
+                player.setPlaybackQuality('small'); // You can specify the desired quality here
+            }, 1000); // You can adjust the delay as needed
+
+
+
+
+
+
+
+
+
+
+            document.getElementById("menu").addEventListener("touchstart", function (startEvent) {
+                var startTime = new Date().getTime();
+
+
+                previousButton.addEventListener("touchend", function (endEvent) {
+                    var endTime = new Date().getTime();
+                    var elapsedTime = endTime - startTime;
+                    if (elapsedTime <= 250) {
+                        player.previousVideo();
+                    }
+                    // Remove the touchend event listener to avoid multiple executions
+                    previousButton.removeEventListener("touchend");
+                });
+
+
+                nextButton.addEventListener("touchend", function (endEvent) {
+                    var endTime = new Date().getTime();
+                    var elapsedTime = endTime - startTime;
+                    if (elapsedTime <= 250) {
+                        player.nextVideo();
+                    }
+                    // Remove the touchend event listener to avoid multiple executions
+                    nextButton.removeEventListener("touchend");
+                });
+
+
+
+
+
+                // Define a function to rewind the YouTube video by 3 seconds
+                function rewindVideo() {
+                    // Check if the player is currently playing
+                    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                        // Get the current playback time
+                        var currentTime = player.getCurrentTime();
+                        // Subtract 3 seconds from the current time to rewind the video
+                        var newTime = currentTime - 3;
+                        // Ensure the new time is not negative
+                        if (newTime < 0) {
+                            newTime = 0; // Set newTime to 0 if it becomes negative
+                        }
+                        // Seek to the new time
+                        player.seekTo(newTime,
+                            true); // true parameter indicates to seek to the new time in seconds
+                    }
+                }
+
+                // Define a function to fast forward the YouTube video by 3 seconds
+                function fastForwardVideo() {
+                    // Check if the player is currently playing
+                    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                        // Get the current playback time
+                        var currentTime = player.getCurrentTime();
+                        // Add 3 seconds to the current time to fast forward the video
+                        var newTime = currentTime + 3;
+                        // Seek to the new time
+                        player.seekTo(newTime,
+                            true); // true parameter indicates to seek to the new time in seconds
+                    }
+                }
+
+                // Check if #next or #previous has .active class and set intervals accordingly
+                if (document.getElementById('next').classList.contains('active')) {
+                    // Set an interval to repeatedly check if 250ms have passed and fast forward the video
+                    var intervalId = setInterval(function () {
+                        // Check if 250ms have passed since touchstart event
+                        var currentTime = new Date().getTime();
+                        if (currentTime - startTime >= 250) {
+                            // Call the function to fast forward the video
+                            fastForwardVideo();
+                        }
+                    }, 100); // You can adjust the interval time for more responsiveness
+
+                    // Add event listener for touchend to clear the interval
+                    document.getElementById("menu").addEventListener("touchend", function () {
+                        clearInterval(intervalId); // Clear the interval when touchend event occurs
+                        // Also remove the touchend event listener on previousButton
+                        previousButton.removeEventListener("touchend");
+                    });
+
+                } else if (document.getElementById('previous').classList.contains('active')) {
+
+                    // Set an interval to repeatedly check if 250ms have passed and rewind the video
+                    var intervalId = setInterval(function () {
+                        // Check if 250ms have passed since touchstart event
+                        var currentTime = new Date().getTime();
+                        if (currentTime - startTime >= 250) {
+                            // Call the function to rewind the video
+                            rewindVideo();
+                        }
+                    }, 100); // You can adjust the interval time for more responsiveness
+
+                    // Add event listener for touchend to clear the interval
+                    document.getElementById("menu").addEventListener("touchend", function () {
+                        clearInterval(intervalId); // Clear the interval when touchend event occurs
+                        // Also remove the touchend event listener on previousButton
+                        previousButton.removeEventListener("touchend");
+                    });
+                }
+
+
+
+
+                // Add event listener for touchend to clear the interval
+                document.getElementById("menu").addEventListener("touchend", function () {
+                    clearInterval(intervalId); // Clear the interval when touchend event occurs
+                    // Also remove the touchend event listener on previousButton
+                    previousButton.removeEventListener("touchend");
+                });
+            });
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.ENDED) {
+                player.nextVideo();
+            }
+        }
+    </script>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+
+</html>
